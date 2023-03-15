@@ -3,7 +3,7 @@ const puppeteer = require("puppeteer");
 module.exports = {
     chat(message, callback) {
         (async () => {
-            const browser = await puppeteer.launch({ headless: true });
+            const browser = await puppeteer.launch({ headless: false, args: ['--no-sandbox', '--disable-setuid-sandbox'] });
             const page = await browser.newPage();
             const msg = message.replace(" ", "+");
 
@@ -58,7 +58,7 @@ module.exports = {
     },
     search_chat() {
         (async () => {
-            const browser = await puppeteer.launch({ headless: true });
+            const browser = await puppeteer.launch({ headless: false, args: ['--no-sandbox', '--disable-setuid-sandbox'] });
             const page = await browser.newPage();
             const msg = message.replace(" ", "+");
 
