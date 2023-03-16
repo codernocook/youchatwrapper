@@ -1,6 +1,9 @@
 'use strict';
 
-// For commonjs
-module.exports = require("./wrapper.js");
+const wrapper = require("./wrapper.js");
 
-// For module
+// For commonjs
+module.exports = require("./wrapper.js")
+
+// For es module
+

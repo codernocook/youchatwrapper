@@ -1,114 +1,28 @@
-const puppeteer = require("puppeteer");
+const fetch = (...args) => import('node-fetch').then(({default: fetch}) => fetch(...args));
 
 module.exports = {
+    apiKey: String,
     chat(message, callback) {
         (async () => {
-            const browser = await puppeteer.launch({ headless: false, args: ['--no-sandbox', '--disable-setuid-sandbox'] });
-            const page = await browser.newPage();
             const msg = message.replace(" ", "+");
+            let apiKeyGiven = undefined;
 
-            // goto You.com
-            await page.goto(`https://you.com/search?q=${msg}&fromSearchBar=false&tbm=youchat`)
-
-            // Get the result by execute javascript
-            
-            const result = await page.evaluate((message) => {
-                let chat_history = document.getElementById("chatHistory");
-                let result_get = undefined;
-                let chat_loop = false;
-                let include_loop = false;
-
-                function delay(ms) {
-                    return new Promise(resolve => setTimeout(resolve, ms));
-                }
-
-                async function check() {
-                    await delay(10*1000);
-                    console.log(document.getElementById("chatHistory"))
-                    chat_history = document.getElementById("chatHistory");
-                    return executecode()
-                }
-                return check();
-                function executecode() {
-                    if (chat_loop === true) return;
-                    chat_loop = true;
-                    result_get = chat_history.children[0]["outerText"];
-                    while (!result_get.includes(". . .")) {
-                        if (include_loop === true) return;
-                        include_loop = true;
-                        if (!result_get.includes(`${message}\n\n`)) {
-                            return result_get
-                        } else {
-                            return result_get.replace(`${message}\n\n`, "");
-                        }
-                    }
-                }
-            }, message)
-
-            
-            //Wait for the result
-            let anti_callback_loop = false;
-            while (result !== undefined) {
-                if (anti_callback_loop === false) {
-                    anti_callback_loop = true; // prevent from looping the callback
-                    callback(result);
-                }
+            if (this.apiKey && typeof(this.apiKey) === "string") {
+                apiKeyGiven = this.apiKey.trim();
+            } else {
+                apiKeyGiven = ""
             }
-        })();
-    },
-    search_chat() {
-        (async () => {
-            const browser = await puppeteer.launch({ headless: false, args: ['--no-sandbox', '--disable-setuid-sandbox'] });
-            const page = await browser.newPage();
-            const msg = message.replace(" ", "+");
 
-            // goto You.com
-            await page.goto(`https://you.com/search?q=${msg}&fromSearchBar=true&tbm=youchat`)
-
-            // Get the result by execute javascript
-            
-            const result = await page.evaluate((message) => {
-                let chat_history = document.getElementById("chatHistory");
-                let result_get = undefined;
-                let chat_loop = false;
-                let include_loop = false;
-
-                function delay(ms) {
-                    return new Promise(resolve => setTimeout(resolve, ms));
+            // api.betterapi.net;
+            fetch(`https://api.betterapi.net/youdotcom/chat?message=${msg}&key=${apiKeyGiven}`).then(res => res.json()).then(json => {
+                try {
+                    if (!json) return console.error("[ERROR]: Something went wrong with the request.")
+                    if (!json["message"]) return console.error("[ERROR]: API not return message.")
+                    callback(json["message"])
+                } catch (err) {
+                    console.error(err)
                 }
-
-                async function check() {
-                    await delay(10*1000);
-                    console.log(document.getElementById("chatHistory"))
-                    chat_history = document.getElementById("chatHistory");
-                    return executecode()
-                }
-                return check();
-                function executecode() {
-                    if (chat_loop === true) return;
-                    chat_loop = true;
-                    result_get = chat_history.children[0]["outerText"];
-                    while (!result_get.includes(". . .")) {
-                        if (include_loop === true) return;
-                        include_loop = true;
-                        if (!result_get.includes(`${message}\n\n`)) {
-                            return result_get
-                        } else {
-                            return result_get.replace(`${message}\n\n`, "");
-                        }
-                    }
-                }
-            }, message)
-
-            
-            //Wait for the result
-            let anti_callback_loop = false;
-            while (result !== undefined) {
-                if (anti_callback_loop === false) {
-                    anti_callback_loop = true; // prevent from looping the callback
-                    callback(result);
-                }
-            }
+            })
         })();
     }
 }

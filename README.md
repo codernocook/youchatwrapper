@@ -1,23 +1,20 @@
 # youchatwrapper
-IMPORTANT: This package is unoffical.
+IMPORTANT: This npm package is unoffical.
+I found this api in You-Python github
+
+You-Python Github: https://github.com/You-OpenSource/You-Python
 
 It may have bug, please report.
 
 Simple code:
 
 ```Javascript
-const youchatwrapper = require("youchatwrapper");
+const youchatwrapper = require("@codernocook/youchatwrapper")
 
-youchatwrapper.chat("who are you", function(callback) {
-    console.log(callback)
-})
-```
+youchatwrapper.apiKey = "Get Api Key here: https://betterapi.net/about/" // You don't really need it, you can get it if you like
 
-```Javascript
-const youchatwrapper = require("./index.js");
-
-youchatwrapper.search_chat("what can you do?", function(callback) {
-    console.log(callback)
+youchatwrapper.chat("Who are you?", function(callback) {
+    console.log(callback); // replace this with your code
 })
 ```
 

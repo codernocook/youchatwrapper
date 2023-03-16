@@ -1,6 +1,6 @@
 {
   "name": "@codernocook/youchatwrapper",
-  "version": "1.0.2",
+  "version": "1.0.5",
   "description": "A youchat wrapper",
   "main": "index.js",
   "scripts": {
@@ -18,6 +18,6 @@
   },
   "homepage": "https://github.com/codernocook/youchatwrapper#README.md",
   "dependencies": {
-    "puppeteer": "^19.7.5"
+    "node-fetch": "^3.3.1"
   }
 }
