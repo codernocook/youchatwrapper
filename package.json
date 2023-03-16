@@ -1,6 +1,6 @@
 {
   "name": "@codernocook/youchatwrapper",
-  "version": "1.0.5",
+  "version": "1.0.7",
   "description": "A youchat wrapper",
   "main": "index.js",
   "scripts": {
