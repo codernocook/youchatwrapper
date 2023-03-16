@@ -17,9 +17,9 @@ module.exports = {
             fetch(`https://api.betterapi.net/youdotcom/chat?message=${msg}&key=${apiKeyGiven}`).then(res => res.json()).then(json => {
                 try {
                     setTimeout(() => {
-                        if (!json) return "We're sorry, something went wrong while processing your request. Please try again." //[ERROR]: Something went wrong with the request.
-                        if (!json["message"]) return "We're sorry, something went wrong while processing your request. Please try again." //[ERROR]: API not return message.
-                        callback(json["message"])
+                        if (!json) callback("We're sorry, something went wrong while processing your request. Please try again."); //[ERROR]: Something went wrong with the request.
+                        if (!json["message"]) callback("We're sorry, something went wrong while processing your request. Please try again."); //[ERROR]: API not return message.
+                        callback(json["message"]);
                     }, 500);
                 } catch (err) {
                     throw err;
