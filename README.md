@@ -27,8 +27,8 @@ Settings:
     apiKey: String, // the ai api key (don't really need)
     customUrl: String, // you can put a website a clone to youdotcom web api
     cloudflare_message_bypass: Boolean, // this setting allow to bypass the message (not 100% working, it's just resend the request)
+    cloudflare_retry_limit: Number, // the limit request call when cloudflare message appear
     retry: Boolean, // resend the request if it caught error
-    clouflare_retry_limit: Number, // the limit request call when cloudflare message appear
     retry_limit: Number // the limit request call when a error happen
 }
 ```
