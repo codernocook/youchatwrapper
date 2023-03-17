@@ -6,16 +6,8 @@ You-Python Github: https://github.com/You-OpenSource/You-Python
 
 It may have bug, please report.
 
-<h></h>
+# How to use?
 
-```Javascript
-import("@codernocook/youchatwrapper").then(({ default: example }) => {
-  console.timeLog('', 'import cjs', example() == 'Foo'); // true
-});
-```
-
-<h></h>
-How to use
 Simple code:
 
 ```Javascript
@@ -49,6 +41,4 @@ const youchatwrapper = require("@codernocook/youchatwrapper");
 youchatwrapper["setting"] = value; //  change the ["setting"] to the Setting you want
 ```
 
-<h></h>
-
-Note: I'm a new javascript developer. My code write really bad.
+> **_NOTE:_**  I'm a new javascript developer. My code write really bad.
