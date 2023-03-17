@@ -1,6 +1,6 @@
 {
   "name": "@codernocook/youchatwrapper",
-  "version": "1.1.2",
+  "version": "1.1.4",
   "description": "A remake version of youdotcom pip.",
   "main": "index.js",
   "scripts": {

@@ -1,5 +1,5 @@
 const fetch = (...args) => import('node-fetch').then(({default: fetch}) => fetch(...args));
-let cloudflare_change = "duetocloudflarelimitsi'mcurentlygettingnewcookies,pleasetryagain."
+let cloudflare_change = "due to cloudflare limits i'm curently getting new cookies, please try again."
 
 module.exports = {
     apiKey: String, // the ai api key (don't really need)
@@ -51,6 +51,15 @@ module.exports = {
                                     return callback("We're sorry, something went wrong while processing your request. Please try again."); //[ERROR]: Something went wrong with the request.
                                 }
                             };
+                            if (json["error"]) {
+                                req_err_counter++; // + 1 value to req_err counter
+                                if (req_err_counter > retry_limit_value) return callback("We're sorry, something went wrong while processing your request. Please try again."); //[ERROR]: API not return message.
+                                if (retry_value === true) {
+                                    execute_get_req(); // call this function when it caught error
+                                } else if (retry_value === false) {
+                                    return callback("We're sorry, something went wrong while processing your request. Please try again."); //[ERROR]: API not return message.
+                                }
+                            }
                             if (!json["message"]) {
                                 req_err_counter++; // + 1 value to req_err counter
                                 if (req_err_counter > retry_limit_value) return callback("We're sorry, something went wrong while processing your request. Please try again."); //[ERROR]: API not return message.
@@ -60,17 +69,51 @@ module.exports = {
                                     return callback("We're sorry, something went wrong while processing your request. Please try again."); //[ERROR]: API not return message.
                                 }
                             };
-                            if (json["message"].toLowerCase().replace(/ /g,'') === cloudflare_change && cloudflare_message_bypass_value === true) {
+                            if (!json["time"]) {
+                                req_err_counter++; // + 1 value to req_err counter
+                                if (req_err_counter > retry_limit_value) return callback("We're sorry, something went wrong while processing your request. Please try again."); //[ERROR]: API not return message.
+                                if (retry_value === true) {
+                                    execute_get_req(); // call this function when it caught error
+                                } else if (retry_value === false) {
+                                    return callback("We're sorry, something went wrong while processing your request. Please try again."); //[ERROR]: API not return message.
+                                }
+                            };
+                            if (!Number(json["time"])) {
+                                req_err_counter++; // + 1 value to req_err counter
+                                if (req_err_counter > retry_limit_value) return callback("We're sorry, something went wrong while processing your request. Please try again."); //[ERROR]: API not return message.
+                                if (retry_value === true) {
+                                    execute_get_req(); // call this function when it caught error
+                                } else if (retry_value === false) {
+                                    return callback("We're sorry, something went wrong while processing your request. Please try again."); //[ERROR]: API not return message.
+                                }
+                            };
+                            if (json["message"].toLowerCase() === cloudflare_change && cloudflare_message_bypass_value === true) {
                                 req_counter++; // +1 value to req_counter
                                 if (req_counter > cloudflare_retry_limit_value) return callback("We're sorry, something went wrong while processing your request. Please try again."); //[ERROR]: Facing issue with cloudflare
                                 setTimeout(() => {
                                     execute_get_req();
                                 }, 800); // wait until they change their cookie
                             }; // send a request again to get answer
+                            let time = Number(json["time"]) || 01;
+                            if (json["message"] === "", time < 02) {
+                                req_err_counter++; // + 1 value to req_err counter
+                                if (req_err_counter > retry_limit_value) return callback("We're sorry, something went wrong while processing your request. Please try again."); //[ERROR]: Something went wrong with the request.
+                                if (retry_value === true) {
+                                    execute_get_req(); // call this function when it caught error
+                                } else if (retry_value === false) {
+                                    return callback("We're sorry, something went wrong while processing your request. Please try again."); //[ERROR]: Something went wrong with the request.
+                                }
+                            }
                             callback(json["message"]);
                         }, 500);
                     } catch (err) {
-                        throw err; // cursed programming
+                        req_err_counter++; // + 1 value to req_err counter
+                        if (req_err_counter > retry_limit_value) return callback("We're sorry, something went wrong while processing your request. Please try again."); //[ERROR]: Something went wrong with the request.
+                        if (retry_value === true) {
+                            execute_get_req(); // call this function when it caught error
+                        } else if (retry_value === false) {
+                            return callback("We're sorry, something went wrong while processing your request. Please try again."); //[ERROR]: Something went wrong with the request.
+                        }
                     }
                 })
             }
