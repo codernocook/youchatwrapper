@@ -1,5 +1,6 @@
 const fetch = (...args) => import('node-fetch').then(({default: fetch}) => fetch(...args));
 let cloudflare_change = "due to cloudflare limits i'm curently getting new cookies, please try again."
+let cloudflare_change_1 = "cloudflare error"
 
 module.exports = {
     apiKey: String, // the ai api key (don't really need)
@@ -87,15 +88,15 @@ module.exports = {
                                     return callback("We're sorry, something went wrong while processing your request. Please try again."); //[ERROR]: API not return message.
                                 }
                             };
-                            if (json["message"].toLowerCase() === cloudflare_change && cloudflare_message_bypass_value === true) {
+                            if ((json["message"].toLowerCase() === cloudflare_change || json["message"].toLowerCase() === cloudflare_change_1) && cloudflare_message_bypass_value === true) {
                                 req_counter++; // +1 value to req_counter
                                 if (req_counter > cloudflare_retry_limit_value) return callback("We're sorry, something went wrong while processing your request. Please try again."); //[ERROR]: Facing issue with cloudflare
                                 return setTimeout(() => {
                                     return execute_get_req();
                                 }, 800); // wait until they change their cookie
                             }; // send a request again to get answer
-                            let time = Number(json["time"]) || 01;
-                            if (json["message"] === "", time < 02) {
+                            let time = Number(json["time"]) || 1;
+                            if (json["message"] === "" && time < 2) {
                                 req_err_counter++; // + 1 value to req_err counter
                                 if (req_err_counter > retry_limit_value) return callback("We're sorry, something went wrong while processing your request. Please try again."); //[ERROR]: Something went wrong with the request.
                                 if (retry_value === true) {
